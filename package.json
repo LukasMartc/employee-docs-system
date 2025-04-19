@@ -1,0 +1,33 @@
+{
+  "name": "employee-docs-system",
+  "version": "1.0.0",
+  "description": "Document manager for employees and HR with role-based access control.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LukasMartc/employee-docs-system.git"
+  },
+  "keywords": [
+    "employee-management",
+    "react",
+    "node",
+    "express",
+    "mongodb",
+    "authenticacion"
+  ],
+  "author": "Lukas Martinez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LukasMartc/employee-docs-system/issues"
+  },
+  "homepage": "https://github.com/LukasMartc/employee-docs-system#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "5.1.0",
+    "mongoose": "8.13.2"
+  }
+}
