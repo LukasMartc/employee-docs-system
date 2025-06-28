@@ -1,0 +1,31 @@
+{
+  "name": "employee-docs-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LukasMartc/employee-docs-system.git"
+  },
+  "author": "Lukas Martínez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LukasMartc/employee-docs-system/issues"
+  },
+  "homepage": "https://github.com/LukasMartc/employee-docs-system#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "17.0.0",
+    "express": "5.1.0",
+    "mongoose": "8.16.1",
+    "morgan": "1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
