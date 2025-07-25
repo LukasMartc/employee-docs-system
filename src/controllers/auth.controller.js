@@ -1,11 +1,9 @@
 import colors from "colors"
-import { createUserService,
-  loginUserService
- } from "../services/auth.service.js"
+import { createAdminService, loginUserService } from "../services/auth.service.js"
 
-export const createUser = async (req, res) => {
+export const createAdmin = async (req, res) => {
   try {
-    const newUser = await createUserService(req.body)
+    const newUser = await createAdminService(req.body)
     return res.status(201).json({
       msg: 'Usuario creado correctamente',
       user: newUser

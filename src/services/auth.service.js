@@ -2,7 +2,7 @@ import User from "../models/user.model.js"
 import { hashPassword, checkPassword } from "../utils/auth.js"
 import { generateJWT } from "../utils/jwt.js"
 
-export const createUserService = async userData => {
+export const createAdminService = async userData => {
   const { username, password } = userData
 
   const userExists = await User.findOne({ username })
@@ -12,8 +12,18 @@ export const createUserService = async userData => {
     throw error
   }
 
-  const user = new User(userData)
-  user.password = await hashPassword(password)
+  if (userData.role && userData.role !== 'admin') {
+    const error = new Error('No se puede crear un usuario con ese rol desde este endpoint')
+    error.status = 403
+    throw error
+  }
+
+  const hashedPassword = await hashPassword(password)
+  const user = new User({
+    username,
+    password: hashedPassword,
+    role: 'admin'
+  })
   await user.save()
   return user
 }

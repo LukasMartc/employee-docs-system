@@ -1,4 +1,6 @@
 import Employee from "../models/employee.model.js"
+import User from "../models/user.model.js"
+import { hashPassword } from "../utils/auth.js"
 
 export const createEmployeeService = async employeeData => {
   const { rut } = employeeData
@@ -12,6 +14,18 @@ export const createEmployeeService = async employeeData => {
 
   const employee = new Employee(employeeData)
   await employee.save()
+
+  const userEmployee = {
+    username: employee.rut,
+    password: employee.rut.split('-')[0].slice(-4),
+    role: 'employee',
+    employee: employee._id
+  }
+
+  const user = new User(userEmployee)
+  user.password = await hashPassword(userEmployee.password)
+  await user.save()
+
   return employee
 }
 
@@ -47,4 +61,17 @@ export const getAllEmployeesService = async ({ page = 1, limit = 10 }, filters) 
     totalEmployees: total,
     employees
   }
+}
+
+export const getEmployeeService = async (employeeId) => {
+  const { id } = employeeId
+
+  const employeeFound = await Employee.findById(id).select('fullname rut area position hireDate')
+  if (!employeeFound) {
+    const error = new Error('El empleado no existe')
+    error.status = 404
+    throw error
+  }
+
+  return employeeFound
 }

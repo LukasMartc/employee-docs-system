@@ -1,11 +1,12 @@
 import colors from "colors"
-import { createEmployeeService, getAllEmployeesService } from "../services/employees.service.js"
+import { createEmployeeService, getAllEmployeesService,
+  getEmployeeService } from "../services/employees.service.js"
 
 export const createEmployee = async (req, res) => {
   try {
     const newEmployee = await createEmployeeService(req.body)
     return res.status(201).json({
-      msg: 'Empleado creado correctamente',
+      msg: 'Empleado y usuario creados correctamente',
       employee: newEmployee
     })
   } catch (error) {
@@ -23,6 +24,17 @@ export const getAllEmployees = async (req, res) => {
     const data = await getAllEmployeesService({ page, limit }, req.query)
 
     res.json(data)
+  } catch (error) {
+    console.log(colors.red(error))
+    const status = error.status || 500
+    res.status(status).json({ error: error.message })
+  }
+}
+
+export const getEmployee = async (req, res) => {
+  try {
+    const employee = await getEmployeeService(req.params)
+    return res.status(200).json(employee)
   } catch (error) {
     console.log(colors.red(error))
     const status = error.status || 500
