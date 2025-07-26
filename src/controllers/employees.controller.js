@@ -1,6 +1,6 @@
 import colors from "colors"
 import { createEmployeeService, getAllEmployeesService,
-  getEmployeeService } from "../services/employees.service.js"
+  getEmployeeService, deleteEmployeeService } from "../services/employees.service.js"
 
 export const createEmployee = async (req, res) => {
   try {
@@ -23,11 +23,11 @@ export const getAllEmployees = async (req, res) => {
     
     const data = await getAllEmployeesService({ page, limit }, req.query)
 
-    res.json(data)
+    return res.json(data)
   } catch (error) {
     console.log(colors.red(error))
     const status = error.status || 500
-    res.status(status).json({ error: error.message })
+    return res.status(status).json({ error: error.message })
   }
 }
 
@@ -38,6 +38,17 @@ export const getEmployee = async (req, res) => {
   } catch (error) {
     console.log(colors.red(error))
     const status = error.status || 500
-    res.status(status).json({ error: error.message })
+    return res.status(status).json({ error: error.message })
+  }
+}
+
+export const deleteEmployee = async (req, res) => {
+  try {
+    await deleteEmployeeService(req.params)
+    return res.status(200).json({ msg: 'El "empleado" junto a su "usuario" han sido eliminado correctamente' })
+  } catch (error) {
+    console.log(colors.red(error))
+    const status = error.status || 500
+    return res.status(status).json({ error: error.message })
   }
 }

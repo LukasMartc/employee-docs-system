@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import Employee from "../models/employee.model.js"
 import User from "../models/user.model.js"
 import { hashPassword } from "../utils/auth.js"
@@ -63,8 +64,15 @@ export const getAllEmployeesService = async ({ page = 1, limit = 10 }, filters) 
   }
 }
 
-export const getEmployeeService = async (employeeId) => {
+export const getEmployeeService = async employeeId => {
   const { id } = employeeId
+
+  // Validar el ObjectId antes de buscar
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const error = new Error('Solicitud no válida')
+    error.status = 400
+    throw error
+  }
 
   const employeeFound = await Employee.findById(id).select('fullname rut area position hireDate')
   if (!employeeFound) {
@@ -74,4 +82,25 @@ export const getEmployeeService = async (employeeId) => {
   }
 
   return employeeFound
+}
+
+export const deleteEmployeeService = async employeeData => {
+  const { id } = employeeData
+
+  // Validar el ObjectId antes de buscar
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const error = new Error('Solicitud no válida')
+    error.status = 400
+    throw error
+  }
+
+  const employeeExists = await Employee.findById(id)
+  if (!employeeExists) {
+    const error = new Error('El empleado no existe')
+    error.status = 404
+    throw error
+  }
+
+  await User.findOneAndDelete({ employee: id })
+  await Employee.findByIdAndDelete(id)
 }

@@ -3,7 +3,8 @@ import { body } from "express-validator"
 import { authenticate } from "../middleware/auth.js"
 import { autherizeAdmin } from "../middleware/authorize.js"
 import { handleInputErrors } from "../middleware/validation.js"
-import { createEmployee, getAllEmployees, getEmployee } from "../controllers/employees.controller.js"
+import { createEmployee, getAllEmployees,
+  getEmployee, deleteEmployee } from "../controllers/employees.controller.js"
 
 const router = Router()
 
@@ -43,5 +44,11 @@ router.get('/:id',
   authenticate,
   autherizeAdmin,
   getEmployee)
+
+router.delete('/:id',
+  authenticate,
+  autherizeAdmin,
+  deleteEmployee
+)
 
 export default router
