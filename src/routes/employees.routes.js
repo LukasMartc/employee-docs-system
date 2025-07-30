@@ -4,7 +4,7 @@ import { authenticate } from "../middleware/auth.js"
 import { autherizeAdmin } from "../middleware/authorize.js"
 import { handleInputErrors } from "../middleware/validation.js"
 import { createEmployee, getAllEmployees,
-  getEmployee, deleteEmployee } from "../controllers/employees.controller.js"
+  getEmployee, deleteEmployee, updateEmployee } from "../controllers/employees.controller.js"
 
 const router = Router()
 
@@ -32,7 +32,8 @@ router.post('/',
       return true
     }),
   handleInputErrors, 
-  createEmployee)
+  createEmployee
+)
 
 router.get('/',
   authenticate,
@@ -42,13 +43,29 @@ router.get('/',
 
 router.get('/:id',
   authenticate,
-  autherizeAdmin,
-  getEmployee)
+  getEmployee
+)
 
 router.delete('/:id',
   authenticate,
   autherizeAdmin,
   deleteEmployee
+)
+
+router.patch('/:id',
+  authenticate,
+  body('fullname')
+    .optional()
+    .notEmpty().withMessage('El nombre completo del empleado es obligatorio')
+    .isLength({ min: 3 }).withMessage('El nombre debe tener al menos 3 caracteres'),
+  body('area')
+    .optional()
+    .notEmpty().withMessage('El área es obligatoria'),
+  body('position')
+    .optional()
+    .notEmpty().withMessage('El cargo es obligatorio'),
+  handleInputErrors, 
+  updateEmployee
 )
 
 export default router
