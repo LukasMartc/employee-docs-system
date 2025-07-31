@@ -1,7 +1,7 @@
 import colors from "colors"
 import { createEmployeeService, getAllEmployeesService,
   getEmployeeService, deleteEmployeeService,
-  updateEmployeeService } from "../services/employees.service.js"
+  updateEmployeeService, updateSensitiveDataService } from "../services/employees.service.js"
 
 export const createEmployee = async (req, res) => {
   try {
@@ -61,6 +61,26 @@ export const updateEmployee = async (req, res) => {
 
     const employee = await updateEmployeeService({ id: req.params.id, requester: req.user, ...req.body})
     return res.status(200).json(employee)
+  } catch (error) {
+    console.log(colors.red(error))
+    const status = error.status || 500
+    return res.status(status).json({ error: error.message })
+  }
+}
+
+
+export const updateSensitiveData = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { newRut, newHireDate } = req.body
+
+    const data = await updateSensitiveDataService(id, { newRut, newHireDate })
+
+    return res.status(200).json({
+      msg: 'Datos sensibles actualizados correctamente',
+      employee: data.employee,
+      user: data.user ?? undefined
+    })
   } catch (error) {
     console.log(colors.red(error))
     const status = error.status || 500

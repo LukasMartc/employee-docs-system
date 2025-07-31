@@ -142,3 +142,39 @@ export const updateEmployeeService = async ({ id, requester, ...newData }) => {
   
   return employeeExists
 }
+
+export const updateSensitiveDataService = async (id, { newRut, newHireDate }) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const error = new Error('Solicitud no válida')
+    error.status = 400
+    throw error
+  }
+
+  const employee = await Employee.findById(id)
+  if (!employee) {
+    const error = new Error('El empleado no existe')
+    error.status = 404
+    throw error
+  }
+
+  let user = null
+
+  if (newRut) {
+    employee.rut = newRut
+
+    user = await User.findOne({ employee: id }) 
+    if (user) {
+      user.username = newRut
+      user.password = newRut.split('-')[0].slice(-4)
+      user.password = await hashPassword(user.password)
+      await user.save()
+    } 
+  }
+
+  if (newHireDate) {
+    employee.hireDate = newHireDate
+  }
+
+  await employee.save()
+  return { employee, user }
+}
