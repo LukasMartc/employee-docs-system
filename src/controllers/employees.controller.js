@@ -68,7 +68,6 @@ export const updateEmployee = async (req, res) => {
   }
 }
 
-
 export const updateSensitiveData = async (req, res) => {
   try {
     const { id } = req.params
